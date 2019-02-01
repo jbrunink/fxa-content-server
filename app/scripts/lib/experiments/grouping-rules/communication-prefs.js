@@ -45,10 +45,17 @@ module.exports = class CommunicationPrefsGroupingRule extends BaseGroupingRule {
   }
 
   choose (subject = {}) {
-    if (! subject.lang) {
+    const { featureFlags } = subject;
+    let { lang } = subject;
+
+    if (featureFlags && Array.isArray(featureFlags.communicationPrefLanguages)) {
+      lang = featureFlags.communicationPrefLanguages;
+    }
+
+    if (! lang) {
       return false;
     }
 
-    return areCommunicationPrefsAvailable(subject.lang);
+    return areCommunicationPrefsAvailable(lang);
   }
 };

@@ -147,6 +147,20 @@ const conf = module.exports = convict({
       'development'
     ]
   },
+  featureFlags: {
+    implementation: {
+      default: 'launch-darkly',
+      doc: 'The feature-flagging implementation to use, e.g. "launch-darkly" or "unleash"',
+      env: 'FEATURE_FLAG_IMPLEMENTATION',
+      format: String
+    },
+    interval: {
+      default: '5 minutes',
+      doc: 'The refresh interval for feature-flagging',
+      env: 'FEATURE_FLAG_INTERVAL',
+      format: 'duration'
+    }
+  },
   flow_id_expiry: {
     default: '2 hours',
     doc: 'Time after which flow ids are considered stale',

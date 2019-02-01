@@ -91,7 +91,8 @@ Start.prototype = {
 
   initializeExperimentGroupingRules () {
     this._experimentGroupingRules = new ExperimentGroupingRules({
-      env: this._config.env
+      env: this._config.env,
+      featureFlags: this._config.featureFlags
     });
   },
 

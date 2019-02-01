@@ -8,6 +8,8 @@ const flowMetrics = require('../flow-metrics');
 const logger = require('../logging/log')('routes.index');
 
 module.exports = function (config) {
+  const featureFlags = require('fxa-shared/feature-flags')(config.get('featureFlags'), {});
+
   const AUTH_SERVER_URL = config.get('fxaccount_url');
   const CLIENT_ID = config.get('oauth_client_id');
   const COPPA_ENABLED = config.get('coppa.enabled');
@@ -46,13 +48,14 @@ module.exports = function (config) {
   route.method = 'get';
   route.path = '/';
 
-  route.process = function (req, res) {
+  route.process = async (req, res) => {
     const flowEventData = flowMetrics.create(FLOW_ID_KEY, req.headers['user-agent']);
 
     res.render('index', {
       // Note that bundlePath is added to templates as a build step
       bundlePath: '/bundle',
       config: serializedConfig,
+      featureFlags: encodeURIComponent(JSON.stringify(await featureFlags.get())),
       flowBeginTime: flowEventData.flowBeginTime,
       flowId: flowEventData.flowId,
       // Note that staticResourceUrl is added to templates as a build step
